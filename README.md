@@ -38,3 +38,14 @@ Reports are generated after test execution with:
 - PASS/FAIL details
 - Test logs
 - Screenshots for failed tests
+## Test Execution Demo
+
+The automation framework executes test cases on SauceDemo application.
+
+Application URL:
+https://www.saucedemo.com/
+
+Execution Command:
+
+```bash
+mvn clean test
