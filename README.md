@@ -49,3 +49,14 @@ Execution Command:
 
 ```bash
 mvn clean test
+
+## API Automation
+
+Implemented API testing using Rest Assured.
+
+Covered:
+- GET API validation
+- POST API validation
+- Status code verification
+- JSON response validation
+- TestNG integration
