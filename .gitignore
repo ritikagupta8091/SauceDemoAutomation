@@ -1,0 +1,16 @@
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Maven build
+target/
+
+# Test reports
+test-output/
+
+# Screenshots
+*.png
+
+# Logs
+*.log
