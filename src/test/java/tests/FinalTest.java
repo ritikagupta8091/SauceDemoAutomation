@@ -21,13 +21,16 @@ public class FinalTest extends BaseTest {
 		LoginPage login = new LoginPage(getDriver());
 
 		login.login(username, password);
+
 		Reporter.log("Login Successful for : " + username, true);
 
-		ExtentReportListener.test.log(Status.INFO, "Login Successful : " + username);
+		ExtentReportListener.test.get().log(Status.INFO, "Login Successful : " + username);
 
 		InventoryPage inventory = new InventoryPage(getDriver());
 
 		Assert.assertEquals(inventory.getProductCount(), 6);
+
+		ExtentReportListener.test.get().log(Status.INFO, "Product count verified");
 
 		inventory.addProductToCart("Sauce Labs Backpack");
 
@@ -35,13 +38,15 @@ public class FinalTest extends BaseTest {
 
 		Reporter.log("Product Added Successfully", true);
 
-		ExtentReportListener.test.log(Status.INFO, "Product Added Successfully");
+		ExtentReportListener.test.get().log(Status.INFO, "Product Added Successfully");
 
 		inventory.clickCart();
 
 		CartPage cart = new CartPage(getDriver());
 
 		Assert.assertEquals(cart.getCartProductCount(), 1);
+
+		ExtentReportListener.test.get().log(Status.INFO, "Cart validation completed");
 
 		cart.clickCheckout();
 
@@ -51,14 +56,17 @@ public class FinalTest extends BaseTest {
 
 		Reporter.log("Checkout Details Entered", true);
 
+		ExtentReportListener.test.get().log(Status.INFO, "Checkout Details Entered");
+
 		checkout.clickContinue();
 
 		checkout.finishOrder();
 
 		Assert.assertEquals(checkout.getSuccessMessage(), "Thank you for your order!");
+
 		Reporter.log("Order Completed Successfully", true);
 
-		ExtentReportListener.test.log(Status.PASS, "Order Completed Successfully");
+		ExtentReportListener.test.get().log(Status.PASS, "Order Completed Successfully");
 
 	}
 

@@ -1,72 +1,58 @@
 package tests;
 
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
 public class BaseTest {
 
-	public static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    protected WebDriver webDriver;
 
-	@BeforeMethod
-	@Parameters("browser")
-	public void launchBrowser(String browser) {
+    @BeforeMethod
+    @Parameters("browser")
+    public void launchBrowser(String browser) {
 
-		Reporter.log("Launching Browser : " + browser, true);
+        System.out.println("Launching Browser : " + browser);
 
-		WebDriver webDriver;
+        if (browser.equalsIgnoreCase("chrome")) {
 
-		if (browser.equalsIgnoreCase("edge")) {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--incognito");
 
-			webDriver = new EdgeDriver();
+            webDriver = new ChromeDriver(options);
 
-		} else if (browser.equalsIgnoreCase("firefox")) {
+        } else if (browser.equalsIgnoreCase("firefox")) {
 
-			FirefoxOptions options = new FirefoxOptions();
+            webDriver = new FirefoxDriver();
 
-			options.addArguments("--width=1920");
-			options.addArguments("--height=1080");
+        } else {
 
-			webDriver = new FirefoxDriver(options);
+            throw new RuntimeException("Browser not supported : " + browser);
+        }
 
-		} else {
+        webDriver.manage().window().maximize();
+        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-			throw new RuntimeException("Browser not supported : " + browser);
+        webDriver.get("https://www.saucedemo.com/");
+    }
 
-		}
+    // This method is required by FinalTest and ExtentReportListener
+    public WebDriver getDriver() {
+        return webDriver;
+    }
 
-		driver.set(webDriver);
+    @AfterMethod
+    public void closeBrowser() {
 
-		getDriver().manage().window().maximize();
-
-		getDriver().get("https://www.saucedemo.com/");
-
-	}
-
-	public static WebDriver getDriver() {
-
-		return driver.get();
-
-	}
-
-	@AfterMethod
-	public void closeBrowser() {
-
-		Reporter.log("Closing Browser", true);
-
-		if (getDriver() != null) {
-
-			getDriver().quit();
-
-			driver.remove();
-
-		}
-
-	}
-
+        if (webDriver != null) {
+            System.out.println("Closing Browser");
+            webDriver.quit();
+        }
+    }
 }

@@ -43,18 +43,19 @@ public class CheckoutPage {
 
 	public void enterCheckoutDetails(String fname, String lname, String zip) {
 
-		wait.until(ExpectedConditions.elementToBeClickable(firstName));
+	    wait.until(ExpectedConditions.urlContains("checkout-step-one"));
 
-		firstName.sendKeys(fname);
+	    wait.until(ExpectedConditions.visibilityOf(firstName));
+	    firstName.clear();
+	    firstName.sendKeys(fname);
 
-		wait.until(ExpectedConditions.elementToBeClickable(lastName));
+	    wait.until(ExpectedConditions.visibilityOf(lastName));
+	    lastName.clear();
+	    lastName.sendKeys(lname);
 
-		lastName.sendKeys(lname);
-
-		wait.until(ExpectedConditions.elementToBeClickable(postalCode));
-
-		postalCode.sendKeys(zip);
-
+	    wait.until(ExpectedConditions.visibilityOf(postalCode));
+	    postalCode.clear();
+	    postalCode.sendKeys(zip);
 	}
 
 	public void clickContinue() {

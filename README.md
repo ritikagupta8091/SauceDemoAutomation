@@ -47,7 +47,6 @@ https://www.saucedemo.com/
 
 Execution Command:
 
-```bash
 mvn clean test
 
 ## API Automation

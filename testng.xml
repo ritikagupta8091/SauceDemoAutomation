@@ -11,8 +11,8 @@
 	 	<class name="tests.FinalTest" />
 		</classes>
 	</test>
-	<test name="Edge Test">
-		<parameter name="browser" value="edge" />
+	<test name="Chrome Test">
+		<parameter name="browser" value="chrome" />
 		<classes>
 			<class name="tests.FinalTest" />
 		</classes>

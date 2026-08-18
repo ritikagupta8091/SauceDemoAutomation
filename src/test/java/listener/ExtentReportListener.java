@@ -8,66 +8,88 @@ import org.testng.ITestResult;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 
 import tests.BaseTest;
 
 public class ExtentReportListener implements ITestListener {
 
-	public static ExtentReports extent;
-	public static ExtentTest test;
+    public static ExtentReports extent;
+    public static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
-	public void onStart(ITestContext context) {
+    @Override
+    public void onStart(ITestContext context) {
 
-		ExtentSparkReporter spark = new ExtentSparkReporter("test-output/ExtentReport.html");
+        ExtentSparkReporter spark =
+                new ExtentSparkReporter("test-output/ExtentReport.html");
 
-		extent = new ExtentReports();
+        spark.config().setTheme(Theme.DARK);
+        spark.config().setDocumentTitle("SauceDemo Automation Report");
+        spark.config().setReportName("Selenium TestNG Automation Execution");
 
-		extent.attachReporter(spark);
+        extent = new ExtentReports();
+        extent.attachReporter(spark);
 
-		extent.setSystemInfo("Project", "QKart Automation");
-		extent.setSystemInfo("Tester", "Ritika");
-		extent.setSystemInfo("Browser", "Chrome/Firefox");
+        extent.setSystemInfo("Project", "SauceDemo Automation");
+        extent.setSystemInfo("Tester", "Ritika Gupta");
+        extent.setSystemInfo("Framework", "Selenium + TestNG + Maven");
+        extent.setSystemInfo("Browser", "Chrome / Firefox");
+    }
 
-	}
+    @Override
+    public void onTestStart(ITestResult result) {
 
-	public void onTestStart(ITestResult result) {
+        ExtentTest extentTest =
+                extent.createTest(result.getMethod().getMethodName());
 
-		test = extent.createTest(result.getMethod().getMethodName());
+        test.set(extentTest);
+    }
 
-	}
+    @Override
+    public void onTestSuccess(ITestResult result) {
 
-	public void onTestSuccess(ITestResult result) {
+        test.get().log(Status.PASS, "Test Passed Successfully");
+    }
 
-		test.log(Status.PASS, "Test Passed");
+    @Override
+    public void onTestFailure(ITestResult result) {
 
-	}
+        test.get().log(Status.FAIL, result.getThrowable());
 
-	public void onTestFailure(ITestResult result) {
+        try {
 
-		test.log(Status.FAIL, result.getThrowable());
+            BaseTest base = (BaseTest) result.getInstance();
 
-		try {
+            String screenshotPath =
+                    ((TakesScreenshot) base.getDriver())
+                    .getScreenshotAs(OutputType.FILE)
+                    .getAbsolutePath();
 
-			BaseTest base = (BaseTest) result.getInstance();
+            test.get().fail(
+                    "Screenshot on Failure",
+                    MediaEntityBuilder
+                            .createScreenCaptureFromPath(screenshotPath)
+                            .build()
+            );
 
-			String path = ((TakesScreenshot) base.driver).getScreenshotAs(OutputType.FILE).getAbsolutePath();
+        } catch (Exception e) {
 
-			test.addScreenCaptureFromPath(path);
+            e.printStackTrace();
+        }
+    }
 
-		} catch (Exception e) {
+    @Override
+    public void onTestSkipped(ITestResult result) {
 
-			e.printStackTrace();
+        test.get().log(Status.SKIP, "Test Skipped");
+    }
 
-		}
+    @Override
+    public void onFinish(ITestContext context) {
 
-	}
-
-	public void onFinish(ITestContext context) {
-
-		extent.flush();
-
-	}
-
+        extent.flush();
+    }
 }
