@@ -23,13 +23,6 @@
             <version>4.34.0</version>
         </dependency>
 
-        <!-- Selenium Chrome DevTools -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v137</artifactId>
-            <version>4.34.0</version>
-        </dependency>
-
         <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
@@ -59,9 +52,7 @@
             <version>5.1.2</version>
         </dependency>
 
-        <!-- Rest Assured API Testing -->
-      
-        <!-- JSON Validation -->
+        <!-- Rest Assured JSON Path -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
@@ -69,14 +60,10 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-        	<groupId>org.automation</groupId>
-        	<artifactId>bdd-framework-m6</artifactId>
-        	<version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>
+
         <plugins>
 
             <!-- Maven Compiler Plugin -->
@@ -102,6 +89,7 @@
             </plugin>
 
         </plugins>
+
     </build>
 
 </project>
